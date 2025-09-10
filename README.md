@@ -71,16 +71,38 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
+-- Arredondar frame principal
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
 -- Caixa de texto
 local textBox = Instance.new("TextBox")
 textBox.Name = "MessageBox"
 textBox.Size = UDim2.new(1, -20, 0, 50)
-textBox.Position = UDim2.new(0, 10, 0, 40)
+textBox.Position = UDim2.new(0, 10, 0, 50)
 textBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 textBox.TextColor3 = Color3.new(1,1,1)
 textBox.ClearTextOnFocus = false
 textBox.PlaceholderText = "Cole ou digite sua mensagem aqui..."
 textBox.Parent = mainFrame
+
+-- Arredondar caixa de texto
+local textCorner = Instance.new("UICorner")
+textCorner.CornerRadius = UDim.new(0, 8)
+textCorner.Parent = textBox
+
+-- Label acima da caixa de texto
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Text = "textbox toddy v2"
+titleLabel.Size = UDim2.new(1, -20, 0, 20)
+titleLabel.Position = UDim2.new(0, 10, 0, 28)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(200,200,200)
+titleLabel.TextScaled = true
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = mainFrame
 
 -- Botões no canto (minimizar e fechar)
 local minimizeButton = Instance.new("TextButton")
@@ -90,6 +112,7 @@ minimizeButton.Text = "-"
 minimizeButton.BackgroundColor3 = Color3.fromRGB(100,100,100)
 minimizeButton.TextColor3 = Color3.new(1,1,1)
 minimizeButton.Parent = mainFrame
+Instance.new("UICorner", minimizeButton).CornerRadius = UDim.new(0,6)
 
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 26, 0, 26)
@@ -98,6 +121,7 @@ closeButton.Text = "×"
 closeButton.BackgroundColor3 = Color3.fromRGB(150,50,50)
 closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
+Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0,6)
 
 makeDraggable(mainFrame)
 
@@ -110,6 +134,7 @@ miniFrame.BackgroundColor3 = Color3.fromRGB(50,50,50)
 miniFrame.BorderSizePixel = 0
 miniFrame.Visible = false
 miniFrame.Parent = screenGui
+Instance.new("UICorner", miniFrame).CornerRadius = UDim.new(0, 10)
 
 -- Botão Enviar (dentro do miniFrame)
 local miniSend = Instance.new("TextButton")
@@ -120,6 +145,7 @@ miniSend.Text = "Enviar"
 miniSend.BackgroundColor3 = Color3.fromRGB(50,150,50)
 miniSend.TextColor3 = Color3.new(1,1,1)
 miniSend.Parent = miniFrame
+Instance.new("UICorner", miniSend).CornerRadius = UDim.new(0,8)
 
 -- Botão "+" para reabrir a UI
 local reopenButton = Instance.new("TextButton")
@@ -130,6 +156,7 @@ reopenButton.Text = "+"
 reopenButton.BackgroundColor3 = Color3.fromRGB(80,80,200)
 reopenButton.TextColor3 = Color3.new(1,1,1)
 reopenButton.Parent = miniFrame
+Instance.new("UICorner", reopenButton).CornerRadius = UDim.new(0,8)
 
 makeDraggable(miniFrame)
 
