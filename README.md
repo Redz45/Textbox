@@ -65,7 +65,7 @@ end
 -- FRAME PRINCIPAL
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, 130)
+mainFrame.Size = UDim2.new(0, 300, 0, 170)
 mainFrame.Position = UDim2.new(0.5, -150, 0.2, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
@@ -94,7 +94,7 @@ textCorner.Parent = textBox
 
 -- Label acima da caixa de texto
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Text = "textbox toddy v2"
+titleLabel.Text = "textbox toddy v3"
 titleLabel.Size = UDim2.new(1, -20, 0, 20)
 titleLabel.Position = UDim2.new(0, 10, 0, 28)
 titleLabel.BackgroundTransparency = 1
@@ -122,6 +122,34 @@ closeButton.BackgroundColor3 = Color3.fromRGB(150,50,50)
 closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
 Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0,6)
+
+-- Botões extras (Mat e Kit)
+local matButton = Instance.new("TextButton")
+matButton.Size = UDim2.new(0.5, -15, 0, 30)
+matButton.Position = UDim2.new(0, 10, 0, 110)
+matButton.Text = "Mat"
+matButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- cinza médio
+matButton.TextColor3 = Color3.new(1,1,1)
+matButton.Parent = mainFrame
+Instance.new("UICorner", matButton).CornerRadius = UDim.new(0,8)
+
+local kitButton = Instance.new("TextButton")
+kitButton.Size = UDim2.new(0.5, -15, 0, 30)
+kitButton.Position = UDim2.new(0.5, 5, 0, 110)
+kitButton.Text = "Kit"
+kitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- cinza médio
+kitButton.TextColor3 = Color3.new(1,1,1)
+kitButton.Parent = mainFrame
+Instance.new("UICorner", kitButton).CornerRadius = UDim.new(0,8)
+
+-- Ações dos botões
+matButton.MouseButton1Click:Connect(function()
+    textBox.Text = "[×] matar [×] tiro estoura blindado"
+end)
+
+kitButton.MouseButton1Click:Connect(function()
+    textBox.Text = "[+] kit médico [+] bandagem"
+end)
 
 makeDraggable(mainFrame)
 
