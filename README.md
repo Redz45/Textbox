@@ -6,6 +6,16 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
 
 local player = Players.LocalPlayer
+
+-- 🔒 Lista de jogadores autorizados
+local allowedPlayers = {
+    ["hprato"] = true, -- adicione mais nomes se quiser
+}
+
+if not allowedPlayers[player.Name] then
+    return -- Sai do script se o jogador não estiver autorizado
+end
+
 local playerGui = player:WaitForChild("PlayerGui")
 
 -- ScreenGui
@@ -14,18 +24,16 @@ screenGui.Name = "ChatGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
--- Função para tornar um UI objeto arrastável, incluindo seus filhos
+-- Função para tornar um UI objeto arrastável
 local function makeDraggable(uiObject)
     local dragging = false
     local dragInput, dragStart, startPos
 
     local function onInputBegan(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = uiObject.Position
-
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     dragging = false
@@ -35,8 +43,7 @@ local function makeDraggable(uiObject)
     end
 
     local function onInputChanged(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end
@@ -65,16 +72,12 @@ end
 -- FRAME PRINCIPAL
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, 170)
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
 mainFrame.Position = UDim2.new(0.5, -150, 0.2, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
-
--- Arredondar frame principal
-local mainCorner = Instance.new("UICorner")
-mainCorner.CornerRadius = UDim.new(0, 10)
-mainCorner.Parent = mainFrame
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 10)
 
 -- Caixa de texto
 local textBox = Instance.new("TextBox")
@@ -86,11 +89,7 @@ textBox.TextColor3 = Color3.new(1,1,1)
 textBox.ClearTextOnFocus = false
 textBox.PlaceholderText = "Cole ou digite sua mensagem aqui..."
 textBox.Parent = mainFrame
-
--- Arredondar caixa de texto
-local textCorner = Instance.new("UICorner")
-textCorner.CornerRadius = UDim.new(0, 8)
-textCorner.Parent = textBox
+Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 8)
 
 -- Label acima da caixa de texto
 local titleLabel = Instance.new("TextLabel")
@@ -104,7 +103,7 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = mainFrame
 
--- Botões no canto (minimizar e fechar)
+-- Botões minimizar e fechar
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Size = UDim2.new(0, 26, 0, 26)
 minimizeButton.Position = UDim2.new(1, -60, 0, 8)
@@ -128,7 +127,7 @@ local matButton = Instance.new("TextButton")
 matButton.Size = UDim2.new(0.5, -15, 0, 30)
 matButton.Position = UDim2.new(0, 10, 0, 110)
 matButton.Text = "Mat"
-matButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- cinza médio
+matButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 matButton.TextColor3 = Color3.new(1,1,1)
 matButton.Parent = mainFrame
 Instance.new("UICorner", matButton).CornerRadius = UDim.new(0,8)
@@ -137,23 +136,35 @@ local kitButton = Instance.new("TextButton")
 kitButton.Size = UDim2.new(0.5, -15, 0, 30)
 kitButton.Position = UDim2.new(0.5, 5, 0, 110)
 kitButton.Text = "Kit"
-kitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- cinza médio
+kitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 kitButton.TextColor3 = Color3.new(1,1,1)
 kitButton.Parent = mainFrame
 Instance.new("UICorner", kitButton).CornerRadius = UDim.new(0,8)
 
--- Ações dos botões
-matButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[×] matar [×] tiro estoura blindado"
-end)
+-- 🔤 NOVO: Quadradinho de tecla de atalho
+local keyLabel = Instance.new("TextLabel")
+keyLabel.Text = "Atalho:"
+keyLabel.Size = UDim2.new(0, 60, 0, 20)
+keyLabel.Position = UDim2.new(0, 10, 0, 150)
+keyLabel.BackgroundTransparency = 1
+keyLabel.TextColor3 = Color3.fromRGB(200,200,200)
+keyLabel.TextScaled = true
+keyLabel.Font = Enum.Font.SourceSansBold
+keyLabel.Parent = mainFrame
 
-kitButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[+] kit médico [+] bandagem"
-end)
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(0, 30, 0, 30)
+keyBox.Position = UDim2.new(0, 75, 0, 146)
+keyBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+keyBox.TextColor3 = Color3.new(1,1,1)
+keyBox.PlaceholderText = "-"
+keyBox.TextScaled = true
+keyBox.ClearTextOnFocus = true
+keyBox.MaxVisibleGraphemes = 1
+keyBox.Parent = mainFrame
+Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 6)
 
-makeDraggable(mainFrame)
-
--- MINI FRAME (quando minimizado) - contém Enviar e +
+-- MINI FRAME
 local miniFrame = Instance.new("Frame")
 miniFrame.Name = "MiniFrame"
 miniFrame.Size = UDim2.new(0, 120, 0, 48)
@@ -164,7 +175,6 @@ miniFrame.Visible = false
 miniFrame.Parent = screenGui
 Instance.new("UICorner", miniFrame).CornerRadius = UDim.new(0, 10)
 
--- Botão Enviar (dentro do miniFrame)
 local miniSend = Instance.new("TextButton")
 miniSend.Name = "MiniSend"
 miniSend.Size = UDim2.new(0.7, -2, 1, 0)
@@ -175,7 +185,6 @@ miniSend.TextColor3 = Color3.new(1,1,1)
 miniSend.Parent = miniFrame
 Instance.new("UICorner", miniSend).CornerRadius = UDim.new(0,8)
 
--- Botão "+" para reabrir a UI
 local reopenButton = Instance.new("TextButton")
 reopenButton.Name = "Reopen"
 reopenButton.Size = UDim2.new(0.3, 0, 1, 0)
@@ -186,13 +195,25 @@ reopenButton.TextColor3 = Color3.new(1,1,1)
 reopenButton.Parent = miniFrame
 Instance.new("UICorner", reopenButton).CornerRadius = UDim.new(0,8)
 
+makeDraggable(mainFrame)
 makeDraggable(miniFrame)
 
--- FUNÇÃO ATUALIZADA PARA ENVIAR MENSAGEM
+-- Guardar tecla escolhida
+local selectedKey = nil
+keyBox.FocusLost:Connect(function()
+    local key = keyBox.Text:upper():sub(1,1)
+    if key ~= "" then
+        selectedKey = key
+        keyBox.Text = key
+    else
+        selectedKey = nil
+        keyBox.Text = "-"
+    end
+end)
+
+-- Função de enviar mensagem
 local function sendMessage(msg)
     if not msg or msg:match("^%s*$") then return end
-
-    -- Tenta o chat novo primeiro
     local success = false
     pcall(function()
         local channel = TextChatService.ChatInputBarConfiguration.TargetTextChannel
@@ -201,19 +222,23 @@ local function sendMessage(msg)
             success = true
         end
     end)
-
-    -- Se não funcionou, tenta o chat antigo
     if not success then
         local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
         if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
             chatEvent.SayMessageRequest:FireServer(msg, "All")
-        else
-            warn("Nenhum sistema de chat encontrado para enviar mensagem.")
         end
     end
 end
 
--- EVENTOS
+-- Eventos
+matButton.MouseButton1Click:Connect(function()
+    textBox.Text = "[×] matar [×] tiro estoura blindado"
+end)
+
+kitButton.MouseButton1Click:Connect(function()
+    textBox.Text = "[+] kit médico [+] bandagem"
+end)
+
 minimizeButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     miniFrame.Visible = true
@@ -230,4 +255,14 @@ end)
 reopenButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = true
     miniFrame.Visible = false
+end)
+
+-- 🔥 Detectar tecla física e enviar mensagem
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
+    if input.UserInputType == Enum.UserInputType.Keyboard and selectedKey then
+        if input.KeyCode.Name:upper() == selectedKey then
+            sendMessage(textBox.Text)
+        end
+    end
 end)
