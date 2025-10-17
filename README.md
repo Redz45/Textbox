@@ -9,11 +9,13 @@ local player = Players.LocalPlayer
 
 -- 🔒 Lista de jogadores autorizados
 local allowedPlayers = {
-    ["hprato"] = true, -- adicione mais nomes se quiser
+    ["hprato"] = true,
+    ["vyyghjgffggh"] = true, -- novo jogador adicionado
 }
 
+-- Se o jogador não estiver na lista, a GUI não aparece
 if not allowedPlayers[player.Name] then
-    return -- Sai do script se o jogador não estiver autorizado
+    return
 end
 
 local playerGui = player:WaitForChild("PlayerGui")
@@ -24,7 +26,7 @@ screenGui.Name = "ChatGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
--- Função para tornar um UI objeto arrastável
+-- Função para tornar UI arrastável
 local function makeDraggable(uiObject)
     local dragging = false
     local dragInput, dragStart, startPos
@@ -79,7 +81,7 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 10)
 
--- Caixa de texto
+-- Caixa de texto principal
 local textBox = Instance.new("TextBox")
 textBox.Name = "MessageBox"
 textBox.Size = UDim2.new(1, -20, 0, 50)
@@ -122,7 +124,7 @@ closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
 Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0,6)
 
--- Botões extras (Mat e Kit)
+-- Botões Mat e Kit
 local matButton = Instance.new("TextButton")
 matButton.Size = UDim2.new(0.5, -15, 0, 30)
 matButton.Position = UDim2.new(0, 10, 0, 110)
@@ -141,7 +143,7 @@ kitButton.TextColor3 = Color3.new(1,1,1)
 kitButton.Parent = mainFrame
 Instance.new("UICorner", kitButton).CornerRadius = UDim.new(0,8)
 
--- 🔤 NOVO: Quadradinho de tecla de atalho
+-- Quadradinho para tecla de atalho
 local keyLabel = Instance.new("TextLabel")
 keyLabel.Text = "Atalho:"
 keyLabel.Size = UDim2.new(0, 60, 0, 20)
@@ -230,7 +232,7 @@ local function sendMessage(msg)
     end
 end
 
--- Eventos
+-- Eventos dos botões
 matButton.MouseButton1Click:Connect(function()
     textBox.Text = "[×] matar [×] tiro estoura blindado"
 end)
@@ -257,7 +259,7 @@ reopenButton.MouseButton1Click:Connect(function()
     miniFrame.Visible = false
 end)
 
--- 🔥 Detectar tecla física e enviar mensagem
+-- 🔥 Tecla física para enviar mensagem
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and selectedKey then
