@@ -7,14 +7,15 @@ local TextChatService = game:GetService("TextChatService")
 
 local player = Players.LocalPlayer
 
--- 🔒 Lista de jogadores autorizados
+-- ðŸ”’ Lista de jogadores autorizados
 local allowedPlayers = {
     ["hprato"] = true,
     ["vyyghjgffggh"] = true,
-    ["MORENIN_500"] = true, -- novo jogador adicionado
+    ["MORENIN_500"] = true,
+    ["aRevoltadospecinhas"] = true, -- novo jogador adicionado
 }
 
--- Se o jogador não estiver na lista, a GUI não aparece
+-- Se o jogador nÃ£o estiver na lista, a GUI nÃ£o aparece
 if not allowedPlayers[player.Name] then
     return
 end
@@ -27,7 +28,7 @@ screenGui.Name = "ChatGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
--- Função para tornar UI arrastável
+-- FunÃ§Ã£o para tornar UI arrastÃ¡vel
 local function makeDraggable(uiObject)
     local dragging = false
     local dragInput, dragStart, startPos
@@ -106,7 +107,7 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = mainFrame
 
--- Botões minimizar e fechar
+-- BotÃµes minimizar e fechar
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Size = UDim2.new(0, 26, 0, 26)
 minimizeButton.Position = UDim2.new(1, -60, 0, 8)
@@ -119,13 +120,13 @@ Instance.new("UICorner", minimizeButton).CornerRadius = UDim.new(0,6)
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 26, 0, 26)
 closeButton.Position = UDim2.new(1, -30, 0, 8)
-closeButton.Text = "×"
+closeButton.Text = "Ã—"
 closeButton.BackgroundColor3 = Color3.fromRGB(150,50,50)
 closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
 Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0,6)
 
--- Botões Mat e Kit
+-- BotÃµes Mat e Kit
 local matButton = Instance.new("TextButton")
 matButton.Size = UDim2.new(0.5, -15, 0, 30)
 matButton.Position = UDim2.new(0, 10, 0, 110)
@@ -214,7 +215,7 @@ keyBox.FocusLost:Connect(function()
     end
 end)
 
--- Função de enviar mensagem
+-- FunÃ§Ã£o de enviar mensagem
 local function sendMessage(msg)
     if not msg or msg:match("^%s*$") then return end
     local success = false
@@ -233,13 +234,13 @@ local function sendMessage(msg)
     end
 end
 
--- Eventos dos botões
+-- Eventos dos botÃµes
 matButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[×] matar [×] tiro estoura blindado"
+    textBox.Text = "[Ã—] matar [Ã—] tiro estoura blindado"
 end)
 
 kitButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[+] kit médico [+] bandagem"
+    textBox.Text = "[+] kit mÃ©dico [+] bandagem"
 end)
 
 minimizeButton.MouseButton1Click:Connect(function()
@@ -260,7 +261,7 @@ reopenButton.MouseButton1Click:Connect(function()
     miniFrame.Visible = false
 end)
 
--- 🔥 Tecla física para enviar mensagem
+-- ðŸ”¥ Tecla fÃ­sica para enviar mensagem
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and selectedKey then
