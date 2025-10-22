@@ -12,7 +12,8 @@ local allowedPlayers = {
     ["hprato"] = true,
     ["vyyghjgffggh"] = true,
     ["MORENIN_500"] = true,
-    ["aRevoltadospecinhas"] = true, -- novo jogador adicionado
+    ["aRevoltadospecinhas"] = true,
+    ["iheibus"] = true,-- novo jogador adicionado
 }
 
 -- Se o jogador nÃ£o estiver na lista, a GUI nÃ£o aparece
