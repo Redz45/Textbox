@@ -11,8 +11,6 @@ local player = Players.LocalPlayer
 local allowedPlayers = {
     ["hprato"] = true,
     ["vyyghjgffggh"] = true,
-    ["MORENIN_500"] = true,
-    ["aRevoltadospecinhas"] = true,
     ["iheibus"] = true,-- novo jogador adicionado
 }
 
