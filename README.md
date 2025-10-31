@@ -6,28 +6,28 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
 
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
--- ðŸ”’ Lista de jogadores autorizados
+-- Lista de jogadores autorizados
 local allowedPlayers = {
     ["hprato"] = true,
     ["vyyghjgffggh"] = true,
-    ["iheibus"] = true,-- novo jogador adicionado
+    ["iheibus"] = true,
 }
 
--- Se o jogador nÃ£o estiver na lista, a GUI nÃ£o aparece
+-- Se o jogador não estiver na lista, a GUI não aparece
 if not allowedPlayers[player.Name] then
     return
 end
-
-local playerGui = player:WaitForChild("PlayerGui")
 
 -- ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ChatGui"
 screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
 screenGui.Parent = playerGui
 
--- FunÃ§Ã£o para tornar UI arrastÃ¡vel
+-- Função para tornar UI arrastável
 local function makeDraggable(uiObject)
     local dragging = false
     local dragInput, dragStart, startPos
@@ -106,7 +106,7 @@ titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = mainFrame
 
--- BotÃµes minimizar e fechar
+-- Botões minimizar e fechar
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Size = UDim2.new(0, 26, 0, 26)
 minimizeButton.Position = UDim2.new(1, -60, 0, 8)
@@ -119,13 +119,13 @@ Instance.new("UICorner", minimizeButton).CornerRadius = UDim.new(0,6)
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 26, 0, 26)
 closeButton.Position = UDim2.new(1, -30, 0, 8)
-closeButton.Text = "Ã—"
+closeButton.Text = "×"
 closeButton.BackgroundColor3 = Color3.fromRGB(150,50,50)
 closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
 Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0,6)
 
--- BotÃµes Mat e Kit
+-- Botões Mat e Kit
 local matButton = Instance.new("TextButton")
 matButton.Size = UDim2.new(0.5, -15, 0, 30)
 matButton.Position = UDim2.new(0, 10, 0, 110)
@@ -214,58 +214,87 @@ keyBox.FocusLost:Connect(function()
     end
 end)
 
--- FunÃ§Ã£o de enviar mensagem
-local function sendMessage(msg)
-    if not msg or msg:match("^%s*$") then return end
-    local success = false
-    pcall(function()
-        local channel = TextChatService.ChatInputBarConfiguration.TargetTextChannel
-        if channel then
-            channel:SendAsync(msg)
-            success = true
-        end
-    end)
-    if not success then
-        local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-        if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
-            chatEvent.SayMessageRequest:FireServer(msg, "All")
-        end
-    end
+-- Contador automático de mensagens
+local messageCount = 0
+local minSpaces = 1
+local maxSpaces = 10
+
+local function gerarMensagemPontos()
+	local spaceCount = math.random(minSpaces, maxSpaces)
+	local spaces = string.rep(" ", spaceCount)
+	return "." .. spaces .. "."
 end
 
--- Eventos dos botÃµes
+-- Função de enviar mensagem
+local function sendMessage(msg)
+	if not msg or msg:match("^%s*$") then return end
+	local success = false
+	pcall(function()
+		local channel = TextChatService.ChatInputBarConfiguration.TargetTextChannel
+		if channel then
+			channel:SendAsync(msg)
+			success = true
+		end
+	end)
+	if not success then
+		local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+		if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
+			chatEvent.SayMessageRequest:FireServer(msg, "All")
+		end
+	end
+
+	-- Incrementa contador e envia automaticamente ".   ."
+	messageCount = messageCount + 1
+	if messageCount >= 5 then
+		messageCount = 0
+		local autoMsg = gerarMensagemPontos()
+		pcall(function()
+			local channel = TextChatService.ChatInputBarConfiguration.TargetTextChannel
+			if channel then
+				channel:SendAsync(autoMsg)
+			else
+				local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+				if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
+					chatEvent.SayMessageRequest:FireServer(autoMsg, "All")
+				end
+			end
+		end)
+	end
+end
+
+-- Eventos dos botões
 matButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[Ã—] matar [Ã—] tiro estoura blindado"
+	textBox.Text = "[×] matar [×] tiro estoura blindado"
 end)
 
 kitButton.MouseButton1Click:Connect(function()
-    textBox.Text = "[+] kit mÃ©dico [+] bandagem"
+	textBox.Text = "[+] kit médico [+] bandagem"
 end)
 
 minimizeButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = false
-    miniFrame.Visible = true
+	mainFrame.Visible = false
+	miniFrame.Visible = true
 end)
 
 closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
+	screenGui:Destroy()
 end)
 
 miniSend.MouseButton1Click:Connect(function()
-    sendMessage(textBox.Text)
+	sendMessage(textBox.Text)
 end)
 
 reopenButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = true
-    miniFrame.Visible = false
+	mainFrame.Visible = true
+	miniFrame.Visible = false
 end)
 
--- ðŸ”¥ Tecla fÃ­sica para enviar mensagem
+-- Tecla física para enviar mensagem
 UserInputService.InputBegan:Connect(function(input, processed)
-    if processed then return end
-    if input.UserInputType == Enum.UserInputType.Keyboard and selectedKey then
-        if input.KeyCode.Name:upper() == selectedKey then
-            sendMessage(textBox.Text)
-        end
-    end
+	if processed then return end
+	if input.UserInputType == Enum.UserInputType.Keyboard and selectedKey then
+		if input.KeyCode.Name:upper() == selectedKey then
+			sendMessage(textBox.Text)
+		end
+	end
 end)
