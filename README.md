@@ -13,6 +13,7 @@ local allowedPlayers = {
     ["hprato"] = true,
     ["vyyghjgffggh"] = true,
     ["iheibus"] = true,
+    ["mvkmuitafe7"] = true, -- ✅ novo jogador adicionado
 }
 
 -- Se o jogador não estiver na lista, a GUI não aparece
@@ -96,7 +97,7 @@ Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 8)
 
 -- Label acima da caixa de texto
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Text = "textbox toddy v5"
+titleLabel.Text = "textbox toddy v4"
 titleLabel.Size = UDim2.new(1, -20, 0, 20)
 titleLabel.Position = UDim2.new(0, 10, 0, 28)
 titleLabel.BackgroundTransparency = 1
