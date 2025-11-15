@@ -11,7 +11,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 -- Lista de jogadores autorizados
 local allowedPlayers = {
     ["hprato"] = true,
-    ["knove1533"] = true,
+    ["sadxusaprogaminha"] = true,
     ["iheibus"] = true,
     ["mvkmuitafe7"] = true, -- ✅ novo jogador adicionado
 }
